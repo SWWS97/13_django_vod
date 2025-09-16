@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LOL</title>
+</head>
+<body>
+    {% for champion in champions %}
+        <h2>
+            {% if forloop.counter <= 3 %}
+                {% if forloop.first %}
+                    OP: <a href="/champion/{{ forloop.counter0 }}">{{ champion.charactor }}</a> <br>
+                {% else %}
+                    {{ forloop.counter | add:-5 }}위: <a href="/champion/{{ forloop.counter0 }}">{{ champion.charactor }}</a> <br>
+                {% endif %}
+            {% endif %}
+        </h2>
+    {% endfor %}
+</body>
+</html>
