@@ -19,6 +19,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import path
 
+from bookmark import views
+
 champion_list = [
     {"charactor": "가렌", "job" : "전사"},
     {"charactor": "럭스", "job" : "마법사"},
@@ -85,4 +87,6 @@ urlpatterns = [
     path("books/", book_all, name="books"),
     path("book/<int:index>/", book_detail, name="book"),
     path("gugu/<int:num>/", gugu, name="gugu"),
+    path("bookmark/", views.bookmark_list),
+    path("bookmark/<int:num>/", views.bookmark_detail),
 ]
