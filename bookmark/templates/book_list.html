@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for book in books %}
+        <h2>
+            {% if forloop.counter < 7 %}
+                {% if forloop.first %}
+                    BEST: <a href="/book/{{ forloop.counter0 }}">{{ book.title }}</a> <br>
+                {% else %}
+                    {{ forloop.counter0 }}위: <a href="/book/{{ forloop.counter0 }}">{{ book.title }}</a> <br>
+                {% endif %}
+            {% endif %}
+        </h2>
+    {% endfor %}
+</body>
+</html>
