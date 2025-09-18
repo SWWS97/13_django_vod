@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-cwoe6zk(d(()ac2bxn9r-q+yagh+qo-f@7jdfg@)f74_qp$=ha
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".trycloudflare.com",]
+ALLOWED_HOSTS = [
+    ".trycloudflare.com",
+    "127.0.0.1",
+    "localhost",
+]
 
 
 # HTTPS로 접속할 때 CSRF 에러 예방 (Django 4.0+)
@@ -116,9 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-KR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
