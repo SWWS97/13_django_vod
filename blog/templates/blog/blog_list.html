@@ -15,6 +15,7 @@
                 </form>
                 {{ request.user.username }} {# 장고 기본 User 모델의 username 필드 값 #}
             {% else %}
+                <a href="{% url "signup" %}">회원가입</a>
                 <a href="{% url "login" %}">로그인</a>
             {% endif %}
         </div>
