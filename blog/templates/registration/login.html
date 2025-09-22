@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>로그인</title>
-</head>
-<body>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }} {# form.as_p : form(장고 기능)에 있는 정보를 p태그(<p>)로 들어가게됨 #}
-    <button>submit</button>
-</form>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <h1>로그인</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }} {# form.as_p : form(장고 기능)에 있는 정보를 p태그(<p>)로 들어가게됨 #}
+        <button>submit</button>
+    </form>
+{% endblock %}

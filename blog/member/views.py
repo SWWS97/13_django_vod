@@ -46,6 +46,11 @@ def login(request):
 
     if form.is_valid():
         django_login(request, form.get_user())
+
+        next = request.GET.get("next")
+        if next:
+            return redirect(next)
+
         return redirect(reverse("blog_list")) # reverse함수 : urls.py에 명시한 name으로 url을 찾아서 가져옴.
 
     context = {

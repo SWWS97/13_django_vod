@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model() # get_user_model() : 장고에 설정된 User를 가져오는 함수
 
 # 제목
 # 본문
@@ -22,6 +25,11 @@ class Blog(models.Model):
     # choices 옵션 : 장고에서 셀렉트 박스 생성해줌
     title = models.CharField("제목", max_length=100)
     content = models.TextField("본문")
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # models.CASCADE => 삭제시 같이 삭제
+    # models.PROTECT => 삭제가 불가능(유저를 삭제할려고 할떄 블로그가 있으면 유저 삭제가 불가능)
+    # models.SET_NULL => NULL(빈값)을 넣는다 => 유저 삭제시 블로그의 author가 null값이 됨
+
     created_at = models.DateTimeField("작성일자", auto_now_add=True)
     updated_at = models.DateTimeField("수정일자", auto_now=True)
 
