@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -6,24 +7,37 @@ from django.urls import reverse
 from blog.forms import BlogForm
 from blog.models import Blog
 
+# def blog_list(request):
+#     blogs = Blog.objects.all().order_by("-created_at")
+
+# visits = int(request.COOKIES.get("visits", 0)) + 1
+
+# request.session["count"] = request.session.get("count", 0) + 1
+
+# context = {
+#     "blogs": blogs,
+#     "count" : request.session["count"],
+# }
+
+# response = render(request, "blog/blog_list.html", context)
+#
+# response.set_cookie("visits", visits)
 
 def blog_list(request):
     blogs = Blog.objects.all().order_by("-created_at")
 
-    visits = int(request.COOKIES.get("visits", 0)) + 1
+    paginator = Paginator(blogs, 10)
 
-    request.session["count"] = request.session.get("count", 0) + 1
+    page = request.GET.get("page")
+    page_object = paginator.get_page(page)
 
     context = {
-        "blogs" : blogs,
-        "count" : request.session["count"],
+        # "blogs" : blogs,
+        "page_object" : page_object,
     }
 
-    response = render(request, "blog/blog_list.html", context)
+    return render(request, "blog/blog_list.html", context)
 
-    response.set_cookie("visits", visits)
-
-    return response
 
 def blog_detail(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
