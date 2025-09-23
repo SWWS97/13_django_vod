@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.views.decorators.http import require_http_methods
 
 from blog.forms import BlogForm
 from blog.models import Blog
@@ -25,6 +27,15 @@ from blog.models import Blog
 
 def blog_list(request):
     blogs = Blog.objects.all().order_by("-created_at")
+
+    q = request.GET.get("q")
+    if q:
+        blogs = blogs.filter(
+            Q(title__icontains=q) |
+            Q(content__icontains=q)
+        )
+
+        # blogs = blogs.filter(content__icontains=q)
 
     paginator = Paginator(blogs, 10)
 
@@ -86,4 +97,14 @@ def blog_update(request, pk):
     }
 
     return render(request, "blog/blog_update.html", context)
+
+@login_required()
+@require_http_methods(["POST"])
+def blog_delete(request, pk):
+    # if request.method != "POST":
+    #     raise Http404
+    blog = get_object_or_404(Blog, pk=pk, author=request.user)
+    blog.delete()
+    return redirect(reverse("blog_list"))
+
 
