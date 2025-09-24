@@ -38,13 +38,12 @@ def blog_list(request):
         # blogs = blogs.filter(content__icontains=q)
 
     paginator = Paginator(blogs, 10)
-
     page = request.GET.get("page")
     page_object = paginator.get_page(page)
 
     context = {
-        # "blogs" : blogs,
-        "page_object" : page_object,
+        "object_list" : page_object.object_list,
+        "page_obj" : page_object,
     }
 
     return render(request, "blog/blog_list.html", context)

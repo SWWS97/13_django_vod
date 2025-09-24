@@ -6,18 +6,28 @@
         <div style="text-align: right; margin-bottom: 10px;">
             <button><a href="{% url "blog_update" blog.pk %}">수정</a></button>
 
-            <form action="{% url "blog_delete" blog.pk %}" method="POST" style="display: inline">
+            <form id="delete_form" action="{% url "blog_delete" blog.pk %}" method="POST" style="display: inline">
                 {% csrf_token %}
-                <button>삭제</button>
+                <button type="button" id="delete_btn">삭제</button>
             </form>
         </div>
     {% endif %}
 
     <div style="text-align: right">
-        {{ blog.author.username }}
+        {{ blog.author.username }} {# {{ test }} #}
     </div>
     <hr>
     <p>{{ blog.content }}</p>
 
     <a href="{% url 'blog_list' %}">목록으로 돌아가기</a>
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.querySelector("#delete_btn").addEventListener("click", function() {
+            if(confirm("삭제 하시겠습니까?")){
+                document.querySelector("#delete_form").submit();
+            }
+        })
+    </script>
 {% endblock %}
