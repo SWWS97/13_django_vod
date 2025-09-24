@@ -22,7 +22,7 @@ class Blog(models.Model):
     )
 
     category = models.CharField("카테고리", max_length=20,
-                                choices=CATEGORY_CHOICES)
+                                choices=CATEGORY_CHOICES, default="free")
     # choices 옵션 : 장고에서 셀렉트 박스 생성해줌
     title = models.CharField("제목", max_length=100)
     content = models.TextField("본문")
@@ -39,10 +39,12 @@ class Blog(models.Model):
         # get_category_display : 모델에 choices 사용시에만 가능
 
     def get_absolute_url(self):
-        return reverse("blog_detail", kwargs={"pk": self.pk})
+        return reverse("blog:detail", kwargs={"pk": self.pk})
 
     class Meta:
         verbose_name = "블로그"
         verbose_name_plural = "블로그 목록"
 
+# category update ORM
+# Blog.objects.filter(category="").update(category="free")
 

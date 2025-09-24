@@ -68,7 +68,7 @@ def blog_create(request):
         blog = form.save(commit=False) # blog 모델만 만들고 DB에 저장하지 않음
         blog.author = request.user
         blog.save() # DB 호출 DB에 저장
-        return redirect(reverse("blog_detail", kwargs={"pk" : blog.pk}))
+        return redirect(reverse("fb:detail", kwargs={"pk" : blog.pk}))
 
 
     context = {
@@ -89,7 +89,7 @@ def blog_update(request, pk):
     form = BlogForm(request.POST or None, instance=blog)
     if form.is_valid():
         blog = form.save() # form이 유효하면 DB에 저장
-        return redirect(reverse("blog_detail", kwargs={"pk" : blog.pk}))
+        return redirect(reverse("fb:detail", kwargs={"pk" : blog.pk}))
 
     context = {
         "form" : form,
@@ -104,6 +104,6 @@ def blog_delete(request, pk):
     #     raise Http404
     blog = get_object_or_404(Blog, pk=pk, author=request.user)
     blog.delete()
-    return redirect(reverse("blog_list"))
+    return redirect(reverse("fb:list"))
 
 

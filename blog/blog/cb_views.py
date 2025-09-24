@@ -8,7 +8,7 @@ from blog.models import Blog
 
 
 class BlogListView(ListView):
-    # model = Blog # 이렇게 정의하면 무조건 object.all()로 가져오게 됨
+    # model = Blog # 이렇게 정의하면 무조건 Blog.object.all()로 가져오게 됨
     # queryset = Blog.objects.all().order_by("-created_at")
     queryset = Blog.objects.all() # == model = Blog
     template_name = "blog/blog_list.html"
@@ -52,7 +52,7 @@ class BlogDetailView(DetailView):
 class BlogCreateView(LoginRequiredMixin, CreateView): # LoginRequiredMixin == @login_required()
     model = Blog
     template_name = "blog/blog_create.html"
-    fields = ("title", "content")
+    fields = ("category", "title", "content")
     # success_url = reverse_lazy("cb_blog_detail") # blog_list등 정적인 페이지로 갈때만 사용
 
     def form_valid(self, form):
@@ -77,7 +77,7 @@ class BlogCreateView(LoginRequiredMixin, CreateView): # LoginRequiredMixin == @l
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     template_name = "blog/blog_update.html"
-    fields = ("title", "content")
+    fields = ("category", "title", "content")
 
     # # Blog 모델에 get_absolute_url 함수로 대체함
     # def get_success_url(self): # == Blog 모델에 get_absolute_url 함수
@@ -92,21 +92,25 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
 
     # 위에 get_object 함수와 같은 코드
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(author=self.request.user)
+            queryset = super().get_queryset()
+            if self.request.user.is_superuser:
+                return queryset
+            return queryset.filter(author=self.request.user)
 
 
 class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(author=self.request.user)
+            queryset = super().get_queryset()
+            if not self.request.user.is_superuser:
+                return queryset.filter(author=self.request.user)
+            return queryset
 
     # 위의 Detail, Update와 다르게 Blog 모델에 정의된 get_absolute_url 함수는 detail 페이지로 가게끔 되어 있어서
     # delete(삭제) 하면 해당 블로그가 없기 때문에 따로 get_success_url로 blog_list로 이동시킴
     def get_success_url(self):
-        return reverse_lazy("blog_list")
+        return reverse_lazy("blog:list")
 
 
 

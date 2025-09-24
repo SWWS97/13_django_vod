@@ -4,15 +4,15 @@
     <h1>블로그 목록</h1>
 
     <p style="text-align: right">
-        <a href="{% url "blog_create" %}">
+        <a href="{% url "blog:create" %}">
             <button>블로그 생성</button>
         </a>
     </p>
 
     {% for blog in object_list %}
-        <p>
-            <a href="{% url 'blog_detail' blog.pk %}">
-                ({{ blog.id }}){{ blog.title }} <span>({{ blog.author.username }})</span> - <small>{{ blog.created_at | date:"Y-m-d"}}</small>
+        <p> {# get_category_display : blog 모델에 choices 사용해서 가능 #}
+            <a href="{% url 'blog:detail' blog.pk %}">
+                [{{ blog.get_category_display }}]{{ blog.title }} <span>({{ blog.author.username }})</span> - <small>{{ blog.created_at | date:"Y-m-d"}}</small>
             </a>
         </p>
     {% endfor %}
