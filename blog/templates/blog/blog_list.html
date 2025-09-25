@@ -1,59 +1,76 @@
 {% extends "base.html" %}
 {% block content %}
     {#    <h1>블로그 목록 {{ count }}</h1>#}
-    <h1>블로그 목록</h1>
+    <div class="mt-2">
+        <h1 class="d-inline">블로그 목록</h1>
+            <a href="{% url "blog:create" %}" class="float-end btn btn-sm btn-primary" >블로그 생성</a>
+    </div>
 
-    <p style="text-align: right">
-        <a href="{% url "blog:create" %}">
-            <button>블로그 생성</button>
-        </a>
-    </p>
+    <hr>
 
     {% for blog in object_list %}
-        <p> {# get_category_display : blog 모델에 choices 사용해서 가능 #}
-            <a href="{% url 'blog:detail' blog.pk %}">
+        <div class="my-1"> {# get_category_display : blog 모델에 choices 사용해서 가능 #}
+            <a href="{% url 'blog:detail' blog.pk %}" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
                 [{{ blog.get_category_display }}]{{ blog.title }} <span>({{ blog.author.username }})</span> - <small>{{ blog.created_at | date:"Y-m-d"}}</small>
             </a>
-        </p>
+        </div>
     {% endfor %}
 
-    <form method="GET" style="margin-bottom: 10px">
-        <input name="q" type="text" Placeholder="검색어를 입력하세요." value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
-        <button>검색</button>
+    <form method="GET" class="my-3 d-flex">
+        <input class="form-control-sm" name="q" type="text" Placeholder="검색어를 입력하세요." value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
+        <button class="btn btn-sm btn-info ms-2">검색</button>
     </form>
     
     <div>
-        {% if page_obj.has_previous %}
-            <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; 첫번째</a>
-            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; 첫번째</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
+            </li>
         {% endif %}
 
         {# 예) 현재 5페이지면 5-2(3) > 1 => 5-3(2) 페이지로 가게함, &hellip : ... 으로 표시함 #}
         {% if page_obj.number|add:-2 > 1 %}
-            <a href="?page={{ page_obj.number|add:-3 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&hellip;</a>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.number|add:-3 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&hellip;</a>
+            </li>
         {% endif %}
 
         {# 예) 25페이지까지 1~10 #}
         {% for i in page_obj.paginator.page_range %}
             {% if page_obj.number == i %}
-                <span>(현재 페이지)</span>
+                <li class="page-item">
+                    <a class="page-link active" href="#">
+                        {{ i }}
+                    </a>
+                </li>
                 {# 예) 5페이지 -4, 5페이지 4 => 1 ~ 9 : i가 2보다 크고 i가 8보다 작은 페이지만 보여줌, 2< i < 8 #}
                 {# 현재페이지 -3(2) < i < 현재페이지 +3(8) 표시 #}
             {% elif i > page_obj.number|add:-3 and i < page_obj.number|add:3 %}
-                <a href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
-                    {{ i }}
-                </a>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
+                </li>
             {% endif %}
         {% endfor %}
 
         {# 예) 현재페이지(5페이지) + 2 가 전체페이지 보다 작으면 #}
         {% if page_obj.number|add:2 < page_obj.paginator.num_pages %}
-            <a href="?page={{ page_obj.number|add:3 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&hellip;</a>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.number|add:3 }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&hellip;</a>
+            </li>
         {% endif %}
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막 &raquo;</a>
+            <li class="item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막 &raquo;</a>
+            </li>
         {% endif %}
+        </ul>
     </div>
 {% endblock %}

@@ -1,19 +1,21 @@
+{% load static %} {# static 폴더를 사용하겠다고 불러옴 #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>블로그 프로젝트</title>
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
 </head>
 <body>
-    <nav style="display: flex; justify-content: space-between">
+    <nav class="d-flex justify-content-between py-2 px-4 bg-black text-white">
         <div>
-            <a href="{% url "blog:list" %}">홈</a>
+            <a class="text-decoration-none text-white" href="{% url "blog:list" %}">홈</a>
         </div>
         <div style="text-align: right">
             {% if request.user.is_authenticated %}
-                <form action="{% url "logout" %}" method="POST" style="display: inline">
+                <form action="{% url "logout" %}" method="POST" class="d-inline">
                     {% csrf_token %}
-                    <button>로그아웃</button>
+                    <button class="btn btn-danger btn-sm">로그아웃</button>
                 </form>
                 {{ request.user.username }} {# 장고 기본 User 모델의 username 필드 값 #}
             {% else %}
@@ -22,7 +24,13 @@
             {% endif %}
         </div>
     </nav>
-    {% block content %}{% endblock %}
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    <footer>
+
+    </footer>
+    <script src="{% static "js/bootstrap.bundle.js" %}"></script>
     {% block js %}{% endblock %}
 </body>
 </html>
