@@ -75,7 +75,7 @@ def blog_create(request):
         "form" : form,
     }
 
-    return render(request, "blog/blog_create.html", context)
+    return render(request, "blog/blog_form.html", context)
 
 
 @login_required()
@@ -95,7 +95,7 @@ def blog_update(request, pk):
         "form" : form,
     }
 
-    return render(request, "blog/blog_update.html", context)
+    return render(request, "blog/blog_form.html", context)
 
 @login_required()
 @require_http_methods(["POST"])

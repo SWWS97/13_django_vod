@@ -51,7 +51,7 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(LoginRequiredMixin, CreateView): # LoginRequiredMixin == @login_required()
     model = Blog
-    template_name = "blog/blog_create.html"
+    template_name = "blog/blog_form.html"
     fields = ("category", "title", "content")
     # success_url = reverse_lazy("cb_blog_detail") # blog_list등 정적인 페이지로 갈때만 사용
 
@@ -73,10 +73,16 @@ class BlogCreateView(LoginRequiredMixin, CreateView): # LoginRequiredMixin == @l
     # def get_success_url(self):
     #     return reverse_lazy("cb_blog_detail", kwargs={"pk": self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["sub_title"] = "작성"
+        context["btn_name"] = "생성"
+        return context
+
 
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
-    template_name = "blog/blog_update.html"
+    template_name = "blog/blog_form.html"
     fields = ("category", "title", "content")
 
     # # Blog 모델에 get_absolute_url 함수로 대체함
@@ -96,6 +102,12 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
             if self.request.user.is_superuser:
                 return queryset
             return queryset.filter(author=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["sub_title"] = "수정"
+        context["btn_name"] = "수정"
+        return context
 
 
 class BlogDeleteView(LoginRequiredMixin, DeleteView):
