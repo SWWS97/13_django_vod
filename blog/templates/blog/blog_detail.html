@@ -23,6 +23,29 @@
     <p>{{ blog.content }}</p>
 
     <hr>
+    {% if request.user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <div class="text-end">
+                <button class="btn btn-primary">작성</button>
+            </div>
+        </form>
+    {% endif %}
+
+    <div>
+        {# comment_set : Comment 모델을 만들고 blog에 연결했을 때 역참조는 이렇게(_set) 가져오게 함 -> 이블로그에 달린 모든 댓글 가져옴 #}
+        {% for comment in blog.comment_set.all %}
+            <div>
+                {{ comment.content }}
+                <p class="text-end">
+                    <small>{{ comment.created_at | date:"Y-m-d H:i" }} | {{ comment.author.username }}</small>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
     <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}
 
