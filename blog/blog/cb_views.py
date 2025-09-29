@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from blog.forms import CommentForm
+from blog.forms import CommentForm, BlogForm
 from blog.models import Blog, Comment
 
 
@@ -87,7 +87,8 @@ class BlogDetailView(ListView):
 class BlogCreateView(LoginRequiredMixin, CreateView): # LoginRequiredMixin == @login_required()
     model = Blog
     template_name = "blog/blog_form.html"
-    fields = ("category", "title", "content")
+    # fields = ("category", "title", "content")
+    form_class = BlogForm
     # success_url = reverse_lazy("cb_blog_detail") # blog_list등 정적인 페이지로 갈때만 사용
 
     def form_valid(self, form):
@@ -118,7 +119,8 @@ class BlogCreateView(LoginRequiredMixin, CreateView): # LoginRequiredMixin == @l
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     template_name = "blog/blog_form.html"
-    fields = ("category", "title", "content")
+    # fields = ("category", "title", "content")
+    form_class = BlogForm
 
     # # Blog 모델에 get_absolute_url 함수로 대체함
     # def get_success_url(self): # == Blog 모델에 get_absolute_url 함수
