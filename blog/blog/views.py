@@ -80,13 +80,17 @@ def blog_create(request):
 
 @login_required()
 def blog_update(request, pk):
-    blog = get_object_or_404(Blog, pk=pk, author=request.user) # author(작성자)와 request(사용자)가 다르면 404
+    if request.user.is_superuser:
+        blog = get_object_or_404(Blog, pk=pk)
+    else:
+        blog = get_object_or_404(Blog, pk=pk, author=request.user) # author(작성자)와 request(사용자)가 다르면 404
 
     # if request.user != blog.author:
     #     raise Http404
 
     # instance=blog : 이미 DB에 있는 Blog 객체를 가져와서 그걸 바탕으로 Form을 채우겠다는 뜻
-    form = BlogForm(request.POST or None, instance=blog)
+    form = BlogForm(request.POST or None, request.FILES or None, instance=blog)
+    print(request.POST, request.FILES)
     if form.is_valid():
         blog = form.save() # form이 유효하면 DB에 저장
         return redirect(reverse("fb:detail", kwargs={"pk" : blog.pk}))

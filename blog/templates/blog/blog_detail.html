@@ -20,6 +20,8 @@
         {{ blog.author.username }} {# {{ test }} #}
     </div>
     <hr>
+    <img src="{{ blog.image.url }}" alt="" class="w-100">
+    
     <p>{{ blog.content | safe }}</p> {# | safe : html을 안전하니까 사용해도 된다고 해주는거 #}
 
     <hr>

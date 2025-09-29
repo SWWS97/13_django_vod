@@ -140,6 +140,13 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
                 return queryset
             return queryset.filter(author=self.request.user)
 
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+    # form.cleaned_data : form_valid 호출 이후에만 사용 가능, 유효성 검사가 성공하면 검증 완료된 데이터가 저장
+    # (FBV에선 is_valid 이후에 사용 가능)
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["sub_title"] = "수정"
