@@ -20,11 +20,11 @@
         {{ blog.author.username }} {# {{ test }} #}
     </div>
     <hr>
-    <p>{{ blog.content }}</p>
+    <p>{{ blog.content | safe }}</p> {# | safe : html을 안전하니까 사용해도 된다고 해주는거 #}
 
     <hr>
     {% if request.user.is_authenticated %}
-        <form method="post">
+        <form method="post" action="{% url "blog:comment_create" blog.pk %}">
             {% csrf_token %}
             {{ comment_form.as_p }}
             <div class="text-end">
@@ -33,10 +33,10 @@
         </form>
     {% endif %}
 
-    <div>
+    <div class="mb-2" id="comment_wrapper">
         {# comment_set : Comment 모델을 만들고 blog에 연결했을 때 역참조는 이렇게(_set) 가져오게 함 -> 이블로그에 달린 모든 댓글 가져옴 #}
-        {% for comment in blog.comment_set.all %}
-            <div>
+        {% for comment in object_list %}
+            <div class="border-bottom">
                 {{ comment.content }}
                 <p class="text-end">
                     <small>{{ comment.created_at | date:"Y-m-d H:i" }} | {{ comment.author.username }}</small>
@@ -45,7 +45,8 @@
         {% endfor %}
     </div>
 
-    <hr>
+    {% include "pagination.html" with fragment="comment_wrapper" %}
+
     <a class="btn btn-sm btn-info" href="{% url 'blog:list' %}">목록</a>
 {% endblock %}
 

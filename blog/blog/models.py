@@ -39,7 +39,7 @@ class Blog(TimeStampModel):
         # get_category_display : 모델에 choices 사용시에만 가능
 
     def get_absolute_url(self):
-        return reverse("blog:detail", kwargs={"pk": self.pk})
+        return reverse("blog:detail", kwargs={"blog_pk": self.pk})
 
     class Meta:
         verbose_name = "블로그"
@@ -61,3 +61,4 @@ class Comment(TimeStampModel):
     class Meta:
         verbose_name = "댓글"
         verbose_name_plural = "댓글 목록"
+        ordering = ("-created_at", "-id")
