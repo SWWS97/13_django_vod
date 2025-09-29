@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from bleach import ALLOWED_TAGS
+from django_summernote.settings import ATTRIBUTES
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -156,7 +159,11 @@ SUMMERNOTE_CONFIG = {
     # Or, you can set it to `False` to use SummernoteInplaceWidget by default - no iframe mode
     # In this case, you have to load Bootstrap/jQuery sources and dependencies manually.
     # Use this when you're already using Bootstrap/jQuery based themes.
-    'iframe': False,
+
+    # 'iframe': False
+    # Django admin의 base.css, form.css 등과 충돌해 폰트, 버튼, 테이블 스타일이 깨지거나, 툴바 아이콘이 흐트러지는 문제가 생김
+    # 그래서 admin에서 사용할땐 True로 바꿔야 css끼리 충돌이 안남
+    'iframe': True,
 
     # You can put custom Summernote settings
     'summernote': {
@@ -211,3 +218,21 @@ SUMMERNOTE_CONFIG = {
 
     # You can add custom css/js for SummernoteWidget.
 }
+
+# bleach
+# bleach.clean(tags=ALLOWED_TAGS, attribute=ATTRIBUTES)
+# ALLOWED_TAGS = [
+#     'a', 'div', 'p', 'span', 'img', 'em', 'i', 'li', 'ol', 'ul', 'strong', 'br',
+#     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+#     'table', 'tbody', 'thead', 'tr', 'td',
+#     'abbr', 'acronym', 'b', 'blockquote', 'code', 'strike', 'u', 'sup', 'sub',
+# ]
+#
+# STYLES = [
+#     'background-color', 'font-size', 'line-height', 'color', 'font-family'
+# ]
+#
+# ATTRIBUTES = {
+#     '*': ['style', 'align', 'title', ],
+#     'a': ['href', ],
+# }
