@@ -2,9 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.py": {
-      "runtime": "python3.11",
-      "maxDuration": 15,
-      "memory": 1024
+      "runtime": "@vercel/python@3.9"
     }
   },
   "env": {
