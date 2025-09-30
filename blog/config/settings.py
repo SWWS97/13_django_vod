@@ -28,11 +28,15 @@ SECRET_KEY = 'django-insecure-xz)mgni+k(0$qj2=nm!a4s)@g)+y6mlwj0^pj=i$+3i%e$ihue
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1",
-                 "localhost",
-                 ".trycloudflare.com",
-                 ".vercel.app",
-                 ]
+ALLOWED_HOSTS = [
+                "127.0.0.1",
+                "localhost",
+                ".trycloudflare.com",
+                # ".vercel.app",
+        ]
+
+# 출처(Origin)에서 오는 요청이면 CSRF 검증을 진행해도 된다
+CSRF_TRUSTED_ORIGINS = ["https://*.trycloudflare.com"]
 
 
 DJANGO_APPS = [
