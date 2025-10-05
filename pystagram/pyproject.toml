@@ -1,0 +1,19 @@
+[project]
+name = "pystagram"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "SWWS97",email = "parkmon26@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django (>=5.2.7,<6.0.0)",
+    "django-extensions (>=4.1,<5.0)",
+    "ipython (>=9.6.0,<10.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
