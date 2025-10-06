@@ -58,7 +58,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / "templates",
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,7 +120,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+# 웹 브라우저가 static 파일에 접근할 때의 URL 경로 prefix
 STATIC_URL = 'static/'
+# 로컬 개발 중 static 파일을 저장하는 실제 경로
+STATIC_DIR = BASE_DIR / 'static'
+# Django가 static 파일을 추가로 찾을 수 있는 디렉토리 리스트
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+# 배포 시 모든 static 파일을 모아둘 최종 경로 (collectstatic 결과물)
+STATIC_ROOT = BASE_DIR / ".static_root"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
