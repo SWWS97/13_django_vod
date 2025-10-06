@@ -9,18 +9,23 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import json
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# with : 파이썬에서 파일 여는 함수
+with open(BASE_DIR / ".config_secret" / "secret.json") as f:
+    config_secret_str = f.read()
+
+SECRET = json.loads(config_secret_str)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c2tlr(o=lim5urs+3kuy+1x!hb%&(r*w_p#d_d7!4g4ugwasf8'
+SECRET_KEY = SECRET["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -139,3 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Auth
 # AUTH_USER_MODEL : Django가 기본적으로 Django에 있는 User가 아니라 내가 만든 커스텀 User를 사용한다고 인식함
 AUTH_USER_MODEL = "member.User"
+
+# Email
+# from django.core.mail.backends.smtp import EmailBackend <- 여기서 가져옴
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
