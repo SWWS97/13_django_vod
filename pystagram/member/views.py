@@ -1,13 +1,13 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.core import signing
 from django.core.signing import TimestampSigner, SignatureExpired
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 
-from member.forms import SignupForm
+from member.forms import SignupForm, LoginForm
 from utils.email import send_email
 
 User = get_user_model()
@@ -78,3 +78,31 @@ def verify_email(request):
     # TODO: 나중에 Redirect 시키기
     # return redirect(reverse("login"))
     return render(request, "auth/email_verified_done.html", {"user": user})
+
+class LoginView(FormView):
+    template_name = "auth/login.html"
+    form_class = LoginForm
+    # TODO: 나중에 메인페이지로 Redirect 시키기
+    success_url = reverse_lazy("login")
+
+    def form_valid(self, form):
+        user = form.user
+        login(self.request, user)
+
+        next_page = self.request.GET.get("next")
+        if next_page:
+            return HttpResponseRedirect(next_page)
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# 1️⃣ 사용자가 로그인 폼에서 이메일/비밀번호 입력
+# ↓
+# 2️⃣ LoginForm.clean() 실행 → DB에서 유저 존재 여부 확인
+# ↓
+# 3️⃣ 로그인 성공 시 self.user = user 로 저장
+# ↓
+# 4️⃣ 뷰(LoginView)에서 form.user 바로 꺼내서 로그인 처리
+#
+# 👉 즉, “한 번 DB에서 가져온 유저 정보를 다시 불러올 필요 없음”
+# 왜냐면 이미 form이 들고 있으니까 DB 쿼리 최소화 시킴
