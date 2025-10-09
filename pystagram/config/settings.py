@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # own
     "member.apps.MemberConfig", # "member"로 해도됨
+    "post.apps.PostConfig", # "post"
     # 3rd party
     "django_extensions",
 ]
@@ -135,6 +136,10 @@ STATICFILES_DIRS = [
 ]
 # 배포 시 모든 static 파일을 모아둘 최종 경로 (collectstatic 결과물)
 STATIC_ROOT = BASE_DIR / ".static_root"
+
+# Media
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
