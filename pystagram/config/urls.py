@@ -22,9 +22,13 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from member import views as member_views
+from post import views as post_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # post
+    path("", post_views.PostListView.as_view(), name="main"),
+
     # auth
     path("signup/", member_views.SignupView.as_view(), name="signup"),
     path("login/", member_views.LoginView.as_view(), name="login"),

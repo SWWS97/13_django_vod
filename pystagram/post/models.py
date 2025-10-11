@@ -18,7 +18,7 @@ class Post(TimeStampModel):
 
 
 class PostImage(TimeStampModel):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images") # related_name 기본값 : "postimage_set"
     image = models.ImageField("이미지", upload_to="post/%Y/%m/%d")
 
     def __str__(self):

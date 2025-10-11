@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+    <style>
+        .post-image{
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-10 offset-1 col-lg-6 offset-lg-3 infinite-container">
+            {% for post in object_list %}
+                <div class="border-bottom my-4 infinite-item">
+                    <div class="mb-2">
+                         <span class="p-2 border rounded-circle me-2">
+                             <i class="fa-solid fa-user" style="width: 16px; padding-left: 1px;"></i>
+                         </span>
+                        {{ post.user.nickname }}
+                    </div>
+                    <div class="swiper" style="max-height: 500px;">
+                        <div class="border-1 swiper-wrapper">
+                            {# images : PostImage모델 21번째줄 related_name #}
+                                {% for post_image in post.images.all %}
+                                    <div class="swiper-slide">
+                                        <img class="img-fluid post-image" src="{{ post_image.image.url }}" alt="">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                {# TODO: like 추가 #}
+                    <div class="mt-2">
+                        {{ post.content | linebreaksbr }} {# linebreaksbr(본문 줄넘김) : \n => br #}
+                    </div>
+                </div>
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="infinite-more-link d-none"></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script src="{% static "js/jquery.min.js" %}"></script> {# jquery : 자바스크립트를 조금 간단히 사용할 수 있는 패키지 #}
+    <script src="{% static "waypoints/jquery.waypoints.min.js" %}"></script>
+    <script src="{% static "waypoints/infinite.min.js" %}"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+          // Optional parameters
+          direction: 'horizontal', {# horizontal : 좌우로 넘기기 #}
+          loop: false, {# loop 루프 반복x #}
+
+          // If we need pagination
+            {# pagination icon  #}
+          pagination: {
+            el: '.swiper-pagination',
+          },
+        });
+
+        let infinite = new Waypoint.Infinite({
+            element: $('.infinite-container')[0],
+            offset: "bottom-in-view"
+        })
+    </script>
+{% endblock %}
