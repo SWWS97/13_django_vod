@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-10 offset-1 col-lg-6 offset-lg-3">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <table class="table">
+                    {{ formset.management_form }}
+                    <thead>
+                        <tr>
+                            {#  “폼셋의 첫 번째 폼 안에서, 사용자에게 보이는 필드들만 가져와서 순회하는 코드” #}
+                            {% for field in formset.forms.0.visible_fields %}
+                                <th class="text-xs">{{ field.label }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                {# 24~49번째 줄 코드는 {{ form.as_p }}를 풀어서 사용한 형태 #}
+                {# formset은 여러 개의 폼을 한 테이블로 묶는 경우가 많아서 as_p처럼 <p>로 각각 분리해버리면 테이블 구조가 깨집 #}
+                {# formset에서는 거의 필수로 이렇게 씀 #}
+                        {% for form in formset.forms %}
+                            <tr class="formset_row">
+                                {% for field in form.visible_fields %}
+                                    <td>
+                                        {% if forloop.first %}
+                                            {% for hidden in form.hidden_fields %}
+                                                {{ hidden }}
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    {{ field.errors.as_ul }}
+
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        {% for error in field.errors %}
+                                            <span class="text-danger">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="btn btn-primary">저장</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+
+    <script>
+        $('.formset_row').formset({
+            addText: '추가하기',
+            deleteText: '삭제',
+            prefix: 'images'
+        })
+    </script>
+{% endblock %}
