@@ -37,6 +37,10 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     # path("accounts/", include("django.contrib.auth.urls")),
     path("verify/", member_views.verify_email, name="verify_email"),
+
+    # include
+    path("comment/", include("post.comment_urls")),
+
     # path("signup/done/", TemplateView.as_view(template_name="auth/signup_done.html"),name="signup_done"),
 ]
 
