@@ -56,7 +56,15 @@ class Comment(TimeStampModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.post} | {self.user}"
+        return f"[comment]{self.post} | {self.user}"
+
+
+class Like(TimeStampModel):
+    post = models.ForeignKey(Post, related_name="likes", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="likes", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"[like]{self.post} | {self.user}"
 
 # @receiver : 특정 이벤트(시그널)이 발생했을 때, 어떤 함수를 자동으로 실행해라
 # post_save : 세이브(저장)하고 난후 @receiver 함수 호출 여기선 Post모델이 저장되고 난 이후에
