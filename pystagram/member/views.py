@@ -5,7 +5,7 @@ from django.core.signing import TimestampSigner, SignatureExpired
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 
 from member.forms import SignupForm, LoginForm
 from utils.email import send_email
@@ -104,3 +104,15 @@ class LoginView(FormView):
 #
 # 👉 즉, “한 번 DB에서 가져온 유저 정보를 다시 불러올 필요 없음”
 # 왜냐면 이미 form이 들고 있으니까 DB 쿼리 최소화 시킴
+
+
+# url에서 기본값은 pk로 가져오게 되는데 nickname으로 받고 싶으니
+# slug_field(여기선 url에서 slug_url_kwarg에 해당하는 값을 보고 유저 컬럼에서 해당 유저의 nickname을 가져옴)
+# 기본값인 pk_url_kwarg = "pk" 이거 대신 slug_url_kwarg = "slug"
+# profile/<str:slug>/ => 예) profile/admin/ => User모델의 nickname(admin)을 가져옴
+class UserProfileView(DetailView):
+    model = User
+    template_name = "profile/detail.html"
+    slug_field = "nickname"
+    slug_url_kwarg = "slug"
+    queryset = User.objects.all().prefetch_related("post_set", "post_set__images")
