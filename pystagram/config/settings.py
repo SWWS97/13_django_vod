@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize', # 천 단위 넘는 숫자에 ,(콤마) 추가
     # own
     "member.apps.MemberConfig", # "member"로 해도됨
     "post.apps.PostConfig", # "post"

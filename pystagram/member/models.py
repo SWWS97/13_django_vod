@@ -1,6 +1,9 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+from utils.models import TimeStampModel
+
+
 # 커스텀 매니저, 유저 작성
 # 추후에 다른 서비스에서 사용할 때 이걸 토대로 작성해도 됨
 
@@ -45,6 +48,18 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     nickname = models.CharField("nickname", max_length=20, unique=True)
+    # 나를 팔로우 하는 사람이 팔로워
+    # 내가 팔로우 하는 사람이 팔로잉
+    # User N:N User이기 때문에 ManyToMany
+    # User테이블(본인) 참조 할 때는 "self" 사용
+    # a <=> b symmetrical=Ture
+    # a => b symmetrical=False
+    # through : 기본 중계 테이블 말고 아래에서 만든 중계 테이블 사용
+    # following : 팔로우 하는 사람 => through_fields 순서는 from_user : 자신, to_user : 팔로우 대상
+    following = models.ManyToManyField(
+        "self", symmetrical=False, related_name="followers",
+        through="UserFollowing", through_fields=("from_user", "to_user")
+    )
 
     objects = UserManager()
     # Django 기본 User의 로그인 ID는 username 필드인데, 이걸 email 필드로 바꾸겠다는 뜻
@@ -93,3 +108,15 @@ class User(AbstractBaseUser):
 # 원래는 user.is_superuser()
 # @property 사용 =>  user.is_superuser
 # 이유 : 괄호 없이 깔끔하게 접근하기 위해
+
+class UserFollowing(TimeStampModel):
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_followers")
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_following")
+
+    class Meta:
+        unique_together = ("to_user", "from_user")
+    # to_user 1, from_user 2 O
+    # to_user 1, from_user 3 O
+    # to_user 1, from_user 4 O
+
+    # to_user 1, from_user 2 X => 기존에 있던걸 다시 만들려고 시도하면 오류
