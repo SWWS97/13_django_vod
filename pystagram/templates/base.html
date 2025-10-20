@@ -18,7 +18,11 @@
     <div>
         <a href="{% url "main" %}" class="text-decoration-non text-white">Pystagram</a>
     </div>
-
+    <div>
+        <a href="{% url 'search' %}">
+            <i class="fa-solid fa-magnifying-glass text-white"></i>
+        </a>
+    </div>
     <div class="text-end">
         {% if request.user.is_authenticated %}
             {{ request.user.nickname }}

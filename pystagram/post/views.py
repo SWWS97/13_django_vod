@@ -98,3 +98,15 @@ def toggle_like(request):
 # image_formset = PostImageFormSet(...) 하면
 # 👉 실제 케이크가 만들어져서
 # “맛보기(is_valid)”, “냉장보관(save)”, “조각내기(forms)” 같은 일을 할 수 있다.
+
+
+def search(request):
+    search_type = request.GET.get("type") # user, tag
+    q = request.GET.get("q", '')
+    print("search_type", search_type)
+    print("q", q)
+
+    if search_type in ["user", "tag"] and q:
+        return render(request, f"search/search_{search_type}.html")
+
+    return render(request, "search/search.html")

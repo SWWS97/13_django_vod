@@ -41,6 +41,9 @@ urlpatterns = [
     # path("accounts/", include("django.contrib.auth.urls")),
     path("verify/", member_views.verify_email, name="verify_email"),
 
+    # search
+    path("search/", post_views.search, name="search"),
+
     # include
     path("comment/", include("post.comment_urls")),
     path("profile/", include("member.urls")),
