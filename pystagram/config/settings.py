@@ -32,7 +32,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -162,3 +161,7 @@ EMAIL_HOST_PASSWORD = SECRET["email"]["password"]
 
 LOGIN_URL = "/login/"
 LOGOUT_REDIRECT_URL = "/"
+
+# OAuth
+NAVER_CLIENT_ID = SECRET["naver"]["client_id"]
+NEVER_SECRET = SECRET["naver"]["secret"]
