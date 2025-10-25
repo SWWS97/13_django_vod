@@ -163,5 +163,5 @@ LOGIN_URL = "/login/"
 LOGOUT_REDIRECT_URL = "/"
 
 # OAuth
-NAVER_CLIENT_ID = SECRET["naver"]["client_id"]
-NEVER_SECRET = SECRET["naver"]["secret"]
+NAVER_CLIENT_ID = SECRET['naver']['client_id']
+NAVER_SECRET = SECRET['naver']['secret']
