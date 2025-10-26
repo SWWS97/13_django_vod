@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
+from utils.forms import BootstrapModelForm
+
 User = get_user_model()
 
 # password1, password2를 __init__을 오버라이딩해서 만들어 줌
@@ -83,7 +85,21 @@ class LoginForm(forms.Form):
         # authenticate() : DB 내부를 조회해서 해당 이메일/비밀번호로 로그인 가능한 유저가 있는지 확인
         # 맞으면 User 객체 반환, 틀리면 None 반환
         self.user = authenticate(email=email, password=password)
+
+        if not self.user:
+            raise forms.ValidationError("이메일 또는 패스워드가 올바르지 않습니다.")
+
         # 유저가 존재하긴 하지만 이메일 인증이 안 됐거나 비활성화된 계정
         if not self.user.is_active:
             raise forms.ValidationError("유저가 인증되지 않았습니다.")
         return cleaned_data # 모든 검증이 끝났다면 정제(cleaned)된 데이터를 반환
+
+
+class NicknameForm(BootstrapModelForm):
+    class Meta:
+        model = User
+        fields = ("nickname",)
+
+        labels = {
+            "nickname" : "닉네임을 입력하여 회원가입을 마무리해주세요."
+        }
